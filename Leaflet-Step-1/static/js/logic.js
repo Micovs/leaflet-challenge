@@ -114,7 +114,7 @@ function createMap(earthquakes) {
   
       var div = L.DomUtil.create('div', 'info legend'),
           magnitudes = [1, 2, 3, 4, 5, 6],
-          labels = [];
+          labels = [];    
   
       // loop through magnitude and generate a label with a colored square for each interval
       for (var i = 0; i < magnitudes.length; i++) {
