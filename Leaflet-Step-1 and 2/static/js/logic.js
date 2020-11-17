@@ -8,13 +8,13 @@ d3.json(queryUrl, function(data) {
 });
 
 // function to determin the colour and the size of the circles representing the earthquake by their size and and depth of the earth quake by colo
-function getColor(magnitude) {
-  return magnitude < 1 ? '#FFEDA0':
-         magnitude < 2 ? '#FEB24C':
-         magnitude < 3 ? '#FD8D3C':
-         magnitude < 4 ? '#FC4E2A':
-         magnitude < 5 ? '#E31A1C':
-         magnitude < 6 ? '#BD0026':
+function getColor(depth) {
+  return depth < 10 ? '#FFEDA0':
+         depth < 20 ? '#FEB24C':
+         depth < 35 ? '#FD8D3C':
+         depth < 55 ? '#FC4E2A':
+         depth < 70 ? '#E31A1C':
+         depth < 90 ? '#BD0026':
                          '#800026';
 }
 function Size(magnitude) {
@@ -27,14 +27,14 @@ function createFeatures(earthquakeData) {
   // Give each feature a popup describing the place and time of the earthquake
   function onEachFeature(feature, layer) {
     layer.bindPopup("<h3> Place: " + feature.properties.place +
-      "</h3><hr><p> Time: " + new Date(feature.properties.time) + "</p>" + "<p> Alert: " + feature.properties.alert + "</p>" + "<p> Tsunami: " + feature.properties.tsunami + "</p>");
+      "</h3><hr><p> Time: " + new Date(feature.properties.time) + "</p>" + "<p> Depth: " + feature.geometry.coordinates[2] + "</p>" + "<p> Magnitude: " + feature.properties.mag + "</p>");
   }
 
   function createCircles(feature, latlng) {
     return new L.circle(latlng,
       {
         radius: Size(feature.properties.mag),
-        fillColor: getColor(feature.properties.mag),
+        fillColor: getColor(feature.geometry.coordinates[2]),
         fillOpacity: 0.45,
         stroke: false,
       })
@@ -116,14 +116,14 @@ function createMap(earthquakes) {
   legend.onAdd = function () {
   
       var div = L.DomUtil.create('div', 'info legend'),
-          magnitudes = [1, 2, 3, 4, 5, 6],
+          depths = [10, 20, 35, 55, 70, 90],
           labels = [];    
   
       // loop through magnitude and generate a label with a colored square for each interval
-      for (var i = 0; i < magnitudes.length; i++) {
+      for (var i = 0; i < depths.length; i++) {
           div.innerHTML +=
-              '<i style="background:' + getColor(magnitudes[i] + 1) + '"></i> ' +
-              magnitudes[i] + (magnitudes[i + 1] ? '&ndash;' + magnitudes[i + 1] + '<br>' : '+');
+              '<i style="background:' + getColor(depths[i] + 1) + '"></i> ' +
+              depths[i] + (depths[i + 1] ? '&ndash;' + depths[i + 1] + '<br>' : '+');
       }
   
       return div;
