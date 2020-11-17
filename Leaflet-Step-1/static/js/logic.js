@@ -105,4 +105,28 @@ function createMap(earthquakes) {
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+
+// Create the legend
+  var legend = L.control({position: 'bottomright'});
+
+  legend.onAdd = function () {
+  
+      var div = L.DomUtil.create('div', 'info legend'),
+          magnitudes = [1, 2, 3, 4, 5, 6],
+          labels = [];
+  
+      // loop through magnitude and generate a label with a colored square for each interval
+      for (var i = 0; i < magnitudes.length; i++) {
+          div.innerHTML +=
+              '<i style="background:' + getColor(magnitudes[i] + 1) + '"></i> ' +
+              magnitudes[i] + (magnitudes[i + 1] ? '&ndash;' + magnitudes[i + 1] + '<br>' : '+');
+      }
+  
+      return div;
+  };
+  
+  legend.addTo(myMap);
+
+
 }
